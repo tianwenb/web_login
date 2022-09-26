@@ -1,0 +1,77 @@
+##公有的配置文件，项目启动最先读取里面的内容
+server:
+  port: 7000
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 500      #最大并发数
+    max-connections: 500     #最大连接数
+    connection-timeout: 30000
+    accepCount: 100      #等待数
+
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  application:
+    name: web_login
+  profiles:
+    active: prod
+  #数据库连接信息
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://43.143.121.82:3306/web_login?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false
+    username: web_login
+    password: dt5zdmJ5e33T6f7Z
+    #druid相关配置
+    druid:
+      #监控统计拦截的filters
+      filters: stat
+      #配置初始化大小/最小/最大
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      #获取连接等待超时时间
+      max-wait: 60000
+      #间隔多久进行一次检测，检测需要关闭的空闲连接
+      time-between-eviction-runs-millis: 60000
+      #一个连接在池中最小生存的时间
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 'x'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      #打开PSCache，并指定每个连接上PSCache的大小。oracle设为true，mysql设为false。分库分表较多推荐设置为false
+      pool-prepared-statements: false
+      max-pool-prepared-statement-per-connection-size: 20
+      web-stat-filter:
+        enabled: true
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+      stat-view-servlet:
+        login-username: druid
+        login-password: druid
+        enabled: true
+      filter:
+        stat:
+          enabled: true
+
+
+
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:/mapper/**/*.xml
+#  mapper-locations: classpath:mapper/*.xml
+
+logging.level.com.hierway.model3d: debug
+#logging.level.com.netflix.discovery: debug
+
+
+api-doc:
+  dev-api:
+    show: true     # true  或者false
+  public-api:
+    show: true       # true  或者false
