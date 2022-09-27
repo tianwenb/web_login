@@ -11,7 +11,7 @@ import java.util.Map;
  * @Created by Yang
  */
 public interface UserLoginService {
-    UserVO login(UserLogin userLogin);
+    boolean signIn(UserLogin userLogin);
 
-    int signup(Map<String, String> params);
+    int signUp(Map<String, String> params);
 }

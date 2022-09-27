@@ -17,6 +17,10 @@ import java.util.TimeZone;
 @SpringBootApplication
 public class WebLoginApplication {
 
+    static {
+        System.setProperty("druid.mysql.usePingMethod", "false");
+    }
+
     public static void main(String[] args) {
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"));
         SpringApplication.run(WebLoginApplication.class, args);

@@ -27,21 +27,18 @@ public class UserLoginServiceImpl implements UserLoginService {
     private UserMapper userMapper;
 
     @Override
-    public UserVO login(UserLogin userLogin) {
-        UserVO vo = new UserVO();
+    public boolean signIn(UserLogin userLogin) {
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("account",userLogin.getAccount());
         UserLogin localUser = userLoginMapper.selectOne(wrapper);
         if (localUser.getPassword().equals(userLogin.getPassword())){
-            vo.setUserId(localUser.getUserId());
-            vo.setAccount(localUser.getAccount());
-            vo.setPassword(localUser.getPassword());
+           return true;
         }
-        return vo;
+        return false;
     }
 
     @Override
-    public int signup(Map<String, String> params) {
+    public int signUp(Map<String, String> params) {
         User user = new User();
         user.setPhone(params.get("phone"));
         user.setName("web-"+params.get("phone"));
@@ -54,7 +51,6 @@ public class UserLoginServiceImpl implements UserLoginService {
             userLogin.setAccount(params.get("account"));
             userLoginMapper.insert(userLogin);
         }
-
 
         return res;
     }

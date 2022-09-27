@@ -1,11 +1,14 @@
 package com.example.web_login.controller;
 
 import com.example.web_login.entity.UserLogin;
-import com.example.web_login.pojo.vo.UserVO;
 import com.example.web_login.service.UserLoginService;
+import com.example.web_login.exception.ApiException;
+import com.example.web_login.exception.ApiResult;
+import com.example.web_login.exception.ApiResultCode;
+import com.example.web_login.exception.ApiResultUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -25,22 +28,30 @@ public class UserController {
     private UserLoginService userLoginService;
 
     @ApiOperation(value = "登录")
-    @GetMapping("/login")
-    public UserVO login(@RequestParam String account,
-                        @RequestParam String pwd)
+    @GetMapping("/sign-in")
+    @CrossOrigin
+    public ApiResult signIn(@RequestParam String account,
+                            @RequestParam String password)
     {
+        if (!StringUtils.hasLength(account) || !StringUtils.hasLength(password) ) {
+            throw new ApiException(ApiResultCode.PARAMS_ERROR,"参数为空");
+        }
+
         UserLogin userLogin = new UserLogin();
         userLogin.setAccount(account);
-        userLogin.setPassword(pwd);
-        return userLoginService.login(userLogin);
+        userLogin.setPassword(password);
+        return ApiResultUtil.success(userLoginService.signIn(userLogin));
     }
 
 
     @ApiOperation(value = "注册")
     @PostMapping("/sign-up")
-    public int signup(@RequestParam Map<String, String> params)
+    public ApiResult signUp(@RequestParam Map<String, String> params)
     {
-        return userLoginService.signup(params);
+        if (!StringUtils.hasLength(params.get("phone")) || !StringUtils.hasLength(params.get("password")) || !StringUtils.hasLength(params.get("account")) ) {
+            throw new ApiException(ApiResultCode.PARAMS_ERROR,"参数为空");
+        }
+        return ApiResultUtil.success(userLoginService.signUp(params));
     }
 
 }
